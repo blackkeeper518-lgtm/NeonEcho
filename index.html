@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon TTS - Dark Edition</title>
+    <style>
+        :root {
+            --bg: #0a0a0c;
+            --card: #151518;
+            --neon: #bc13fe;
+            --neon-glow: rgba(188, 19, 254, 0.4);
+            --text: #e2e8f0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0a0a0c 100%);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .container {
+            background: var(--card);
+            width: 90%;
+            max-width: 400px;
+            padding: 2.5rem;
+            border-radius: 24px;
+            border: 1px solid rgba(188, 19, 254, 0.3);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5), 0 0 40px var(--neon-glow);
+            text-align: center;
+        }
+        h2 { 
+            margin: 0 0 1.5rem; 
+            font-size: 1.8rem; 
+            color: #fff;
+            text-shadow: 0 0 10px var(--neon);
+            letter-spacing: 1px;
+        }
+        textarea {
+            width: 100%;
+            height: 140px;
+            padding: 15px;
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 12px;
+            color: var(--neon);
+            font-size: 16px;
+            box-sizing: border-box;
+            margin-bottom: 1.2rem;
+            outline: none;
+            transition: border 0.3s;
+        }
+        textarea:focus { border-color: var(--neon); box-shadow: 0 0 10px var(--neon-glow); }
+        select {
+            width: 100%;
+            padding: 12px;
+            background: #1a1a1d;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: var(--neon);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 0 15px var(--neon-glow);
+            transition: transform 0.1s, opacity 0.2s;
+        }
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        button:active { transform: translateY(1px); }
+        button:disabled { background: #444; box-shadow: none; cursor: not-allowed; }
+        #status {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 1.2rem;
+            height: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>VOICE NEON</h2>
+    <textarea id="t" placeholder="พิมพ์ข้อความที่นี่..."></textarea>
+    <select id="v">
+        <option value="Aoede">Aoede (โหมดสดใส)</option>
+        <option value="Leda">Leda (โหมดนุ่มนวล)</option>
+        <option value="Kore">Kore (โหมดมาตรฐาน)</option>
+    </select>
+    <button id="b" onclick="s()">GENERATE VOICE</button>
+    <div id="status">Ready</div>
+</div>
+
+<script>
+    const apiKey = ""; 
+    const model = "gemini-2.5-flash-preview-tts";
+
+    async function s() {
+        const text = document.getElementById('t').value;
+        const btn = document.getElementById('b');
+        const st = document.getElementById('status');
+        
+        if (!text) return;
+
+        btn.disabled = true;
+        st.innerText = "Processing...";
+
+        try {
+            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text }] }],
+                    generationConfig: {
+                        responseModalities: ["AUDIO"],
+                        speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: document.getElementById('v').value } } }
+                    }
+                })
+            });
+
+            const data = await r.json();
+            const b64 = data.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+
+            if (b64) {
+                const audio = new Audio(URL.createObjectURL(b64ToWav(b64, 24000)));
+                audio.play();
+                st.innerText = "Playing...";
+                audio.onended = () => st.innerText = "Ready";
+            }
+        } catch (e) {
+            st.innerText = "Error";
+        } finally {
+            btn.disabled = false;
+        }
+    }
+
+    function b64ToWav(b64, r) {
+        const b = atob(b64), l = b.length, ab = new ArrayBuffer(44 + l), v = new DataView(ab);
+        const s = (o, str) => { for (let i = 0; i < str.length; i++) v.setUint8(o + i, str.charCodeAt(i)); };
+        s(0, 'RIFF'); v.setUint32(4, 36 + l, true); s(8, 'WAVE'); s(12, 'fmt ');
+        v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+        v.setUint32(24, r, true); v.setUint32(28, r * 2, true); v.setUint16(32, 2, true);
+        v.setUint16(34, 16, true); s(36, 'data'); v.setUint32(40, l, true);
+        for (let i = 0; i < l; i++) v.setUint8(44 + i, b.charCodeAt(i));
+        return new Blob([ab], { type: 'audio/wav' });
+    }
+</script>
+
+</body>
+</html>
