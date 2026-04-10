@@ -3,161 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neon TTS - Dark Edition</title>
+    <title>Voice Neon - Fast & Furious Edition</title>
     <style>
         :root {
             --bg: #0a0a0c;
             --card: #151518;
-            --neon: #bc13fe;
-            --neon-glow: rgba(188, 19, 254, 0.4);
+            --neon: #00f2ff; /* เปลี่ยนเป็นสีฟ้าตัดส้มให้ดูไวขึ้น */
+            --neon-glow: rgba(0, 242, 255, 0.4);
             --text: #e2e8f0;
         }
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background-color: var(--bg);
-            background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0a0a0c 100%);
+            background-image: radial-gradient(circle at 50% 50%, #101020 0%, #0a0a0c 100%);
             color: var(--text);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; margin: 0;
         }
         .container {
-            background: var(--card);
-            width: 90%;
-            max-width: 400px;
-            padding: 2.5rem;
-            border-radius: 24px;
-            border: 1px solid rgba(188, 19, 254, 0.3);
-            box-shadow: 0 0 20px rgba(0,0,0,0.5), 0 0 40px var(--neon-glow);
+            background: var(--card); width: 90%; max-width: 500px;
+            padding: 2.5rem; border-radius: 24px;
+            border: 1px solid var(--neon);
+            box-shadow: 0 0 30px var(--neon-glow);
             text-align: center;
         }
-        h2 { 
-            margin: 0 0 1.5rem; 
-            font-size: 1.8rem; 
-            color: #fff;
-            text-shadow: 0 0 10px var(--neon);
-            letter-spacing: 1px;
-        }
+        h2 { color: #fff; text-shadow: 0 0 10px var(--neon); margin-bottom: 1rem; }
         textarea {
-            width: 100%;
-            height: 140px;
-            padding: 15px;
-            background: #000;
-            border: 1px solid #333;
-            border-radius: 12px;
-            color: var(--neon);
-            font-size: 16px;
-            box-sizing: border-box;
-            margin-bottom: 1.2rem;
-            outline: none;
-            transition: border 0.3s;
+            width: 100%; height: 200px; padding: 15px; background: #000;
+            border: 1px solid #333; border-radius: 12px; color: var(--neon);
+            margin-bottom: 1rem; outline: none; box-sizing: border-box; resize: none;
         }
-        textarea:focus { border-color: var(--neon); box-shadow: 0 0 10px var(--neon-glow); }
-        select {
-            width: 100%;
-            padding: 12px;
-            background: #1a1a1d;
-            border: 1px solid #333;
-            color: #fff;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            cursor: pointer;
+        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+        select, input {
+            padding: 10px; background: #1a1a1d; border: 1px solid #333;
+            color: #fff; border-radius: 8px; font-size: 12px;
         }
         button {
-            width: 100%;
-            padding: 14px;
-            background: var(--neon);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            box-shadow: 0 0 15px var(--neon-glow);
-            transition: transform 0.1s, opacity 0.2s;
+            width: 100%; padding: 16px; background: var(--neon); color: #000;
+            border: none; border-radius: 12px; font-weight: bold; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 1px;
         }
-        button:hover { opacity: 0.9; transform: translateY(-1px); }
-        button:active { transform: translateY(1px); }
-        button:disabled { background: #444; box-shadow: none; cursor: not-allowed; }
-        #status {
-            font-size: 0.8rem;
-            color: #888;
-            margin-top: 1.2rem;
-            height: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+        button:disabled { background: #444; color: #888; cursor: not-allowed; }
+        #status { font-size: 10px; color: var(--neon); margin-top: 1rem; font-family: monospace; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>VOICE NEON</h2>
-    <textarea id="t" placeholder="พิมพ์ข้อความที่นี่..."></textarea>
-    <select id="v">
-        <option value="Aoede">Aoede (โหมดสดใส)</option>
-        <option value="Leda">Leda (โหมดนุ่มนวล)</option>
-        <option value="Kore">Kore (โหมดมาตรฐาน)</option>
-    </select>
-    <button id="b" onclick="s()">GENERATE VOICE</button>
-    <div id="status">Ready</div>
+    <h2>FAST VOICE NEON</h2>
+    <textarea id="t" placeholder="ยัดข้อความยาวๆ มาเลย เดี๋ยวจัดให้แบบไวแสง..."></textarea>
+    
+    <div class="controls">
+        <select id="v">
+            <option value="Puck">Puck (ไว/กวน)</option>
+            <option value="Charon">Charon (นุ่มแต่ไว)</option>
+            <option value="Kore">Kore (มาตรฐาน)</option>
+        </select>
+        <input type="number" id="speed" value="1.5" step="0.1" min="0.5" max="2.0" title="ความเร็วเสียง">
+    </div>
+
+    <button id="b" onclick="startTalking()">GENERATE & SPEAK FAST</button>
+    <div id="status">READY TO BLAST</div>
 </div>
 
 <script>
-    const apiKey = ""; 
-    const model = "gemini-2.5-flash-preview-tts";
+    const apiKey = "AIzaSyDnbpXFRJqrBFehlAN-T1x56P201VC1Zm4"; 
+    const modelName = "gemini-1.5-flash"; // เน้นความไว
 
-    async function s() {
+    let audioQueue = [];
+    let isPlaying = false;
+
+    async function startTalking() {
         const text = document.getElementById('t').value;
+        const voiceName = document.getElementById('v').value;
+        const speed = document.getElementById('speed').value;
         const btn = document.getElementById('b');
         const st = document.getElementById('status');
-        
-        if (!text) return;
+
+        if (!text) { alert("ยัดข้อความมาก่อนอีชาย!"); return; }
 
         btn.disabled = true;
-        st.innerText = "Processing...";
-
+        st.innerText = "กำลังประมวลผลแบบเร่งด่วน...";
+        
+        // แบ่งข้อความเป็นส่วนๆ ถ้ามันยาวเกินไป (Split by punctuation)
+        const chunks = text.match(/[^.!?\n]+[.!?\n]*/g) || [text];
+        
+        audioQueue = [];
+        
         try {
-            const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text }] }],
-                    generationConfig: {
-                        responseModalities: ["AUDIO"],
-                        speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: document.getElementById('v').value } } }
-                    }
-                })
-            });
+            for (let chunk of chunks) {
+                if (chunk.trim().length === 0) continue;
+                
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: chunk }] }],
+                        generationConfig: {
+                            responseModalities: ["AUDIO"],
+                            speechConfig: {
+                                voiceConfig: {
+                                    prebuiltVoiceConfig: { voiceName: voiceName }
+                                }
+                            }
+                        }
+                    })
+                });
 
-            const data = await r.json();
-            const b64 = data.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-
-            if (b64) {
-                const audio = new Audio(URL.createObjectURL(b64ToWav(b64, 24000)));
-                audio.play();
-                st.innerText = "Playing...";
-                audio.onended = () => st.innerText = "Ready";
+                const data = await response.json();
+                const audioPart = data.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+                
+                if (audioPart) {
+                    audioQueue.push({
+                        data: audioPart.inlineData.data,
+                        speed: speed
+                    });
+                    if (!isPlaying) playNext();
+                }
             }
         } catch (e) {
-            st.innerText = "Error";
+            st.innerText = "พังดิ: " + e.message;
         } finally {
             btn.disabled = false;
         }
     }
 
-    function b64ToWav(b64, r) {
-        const b = atob(b64), l = b.length, ab = new ArrayBuffer(44 + l), v = new DataView(ab);
-        const s = (o, str) => { for (let i = 0; i < str.length; i++) v.setUint8(o + i, str.charCodeAt(i)); };
-        s(0, 'RIFF'); v.setUint32(4, 36 + l, true); s(8, 'WAVE'); s(12, 'fmt ');
-        v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
-        v.setUint32(24, r, true); v.setUint32(28, r * 2, true); v.setUint16(32, 2, true);
-        v.setUint16(34, 16, true); s(36, 'data'); v.setUint32(40, l, true);
-        for (let i = 0; i < l; i++) v.setUint8(44 + i, b.charCodeAt(i));
-        return new Blob([ab], { type: 'audio/wav' });
+    function playNext() {
+        if (audioQueue.length === 0) {
+            isPlaying = false;
+            document.getElementById('status').innerText = "READY";
+            return;
+        }
+
+        isPlaying = true;
+        const current = audioQueue.shift();
+        const blob = b64ToBlob(current.data, "audio/wav");
+        const url = URL.createObjectURL(blob);
+        const audio = new Audio(url);
+        
+        // ปรับ Speed ในตัว Audio Tag
+        audio.playbackRate = current.speed;
+        
+        document.getElementById('status').innerText = "กำลังพ่นไฟ...";
+        audio.play();
+        audio.onended = () => {
+            URL.revokeObjectURL(url);
+            playNext();
+        };
+    }
+
+    function b64ToBlob(b64, type) {
+        const bin = atob(b64);
+        const arr = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+        return new Blob([arr], { type: type });
     }
 </script>
 
